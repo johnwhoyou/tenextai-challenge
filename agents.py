@@ -1,15 +1,12 @@
+from livekit.plugins import openai
 from livekit.agents import Agent, AgentSession, ChatContext, function_tool
 
 class Tier3Agent(Agent):
-    def __init__(self, chat_ctx: ChatContext = None, llm=None):
-        super().__init__(
-            instructions="You are a senior customer support agent. Handle escalations like cancellations, disputes, or complaints. Speak with professionalism.",
-            chat_ctx=chat_ctx,
-            llm=llm
-        )
+    def __init__(self):
+        super().__init__(instructions="You are a senior customer support agent. Handle escalations like cancellations, disputes, or complaints. Speak with professionalism.")
 
     async def on_enter(self) -> None:
-        await self.session.generate_reply(instructions="Thank you for holding. I'm a senior support agent, and I'm here to help you with your request.")
+        await self.session.generate_reply(instructions="Thank you for holding. I'm a senior support agent, and I'm here to help you with your concern.")
 
 
 class Tier1Agent(Agent):
@@ -31,4 +28,4 @@ class Tier1Agent(Agent):
     async def escalate(self, reason: str):
         await self.session.generate_reply(instructions="I'm escalating your request now. I'll transfer you to a senior support agent who will assist you shortly.")
 
-        return Tier3Agent(chat_ctx=self.chat_ctx, llm=self.session.llm)
+        return Tier3Agent()
